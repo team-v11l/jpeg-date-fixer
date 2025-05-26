@@ -1,0 +1,8 @@
+# Folders
+images/
+
+# Notebooks
+*.ipynb
+
+# Workspace settings
+.vscode/
