@@ -56,6 +56,7 @@ if __name__ == '__main__':
             print("Insert datetime based on filename")
             img.set_datetime()
             print(f"{filename} datetime is now set to: {img.dt}")
+            print("----------------------------------------------")
     
     
     
@@ -66,3 +67,5 @@ if __name__ == '__main__':
 # handle error if not image
 # implement setter to modify datetime into file
 # Pylint
+# print image file name
+# move non-jpg to new folder

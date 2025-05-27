@@ -1,8 +1,7 @@
 # Folders
+__pycache__/
+.vscode/
 images/
 
 # Notebooks
 *.ipynb
-
-# Workspace settings
-.vscode/
