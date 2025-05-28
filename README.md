@@ -7,3 +7,9 @@ The application expects filenames to follow specific patterns to extract date an
 
 - **WhatsApp Images**: IMG-YYYYMMDD-WAXXXX.jpg (e.g. IMG-20180120-WA0004.jpg)
 - **Phone Camera Images**: IMG_YYYYMMDD_HHMMSS.jpg (e.g. IMG_20250124_235316.jpg)
+
+## Next steps
+- Add data validation i.e. input file is a JPEG image
+- Create log file
+- Containerise the app
+- Finalise README
