@@ -5,15 +5,28 @@ from pathlib import Path
 import piexif
 from PIL import Image
 
+PATH_TO_FOLDER = ''
+
+def input_target_folder():
+    global PATH_TO_FOLDER
+    cwd = os.getcwd()
+    target_folder = input("Enter the name of the target directory: ")
+    target_folder = target_folder.strip('./ ')
+    PATH_TO_FOLDER = Path(cwd)/target_folder
+
+    if os.path.exists(PATH_TO_FOLDER):
+        print(f"\nPath to target folder: {PATH_TO_FOLDER}\n")
+    else:
+        print(f"\nFolder `{target_folder}` does not exist.\n")
+    
 
 class MyImage:
     
-    DIRECTORY = Path('./images')
     DATETIME_FORMAT = "%Y:%m:%d %H:%M:%S"
     
     def __init__(self, filename):
         self._filename: str = filename
-        self._path_to_file = str(self.DIRECTORY/filename)
+        self._path_to_file = str(PATH_TO_FOLDER/filename)
         self._exif_dict: dict = piexif.load(self._path_to_file)
     
     @property
@@ -46,7 +59,10 @@ class MyImage:
 
 
 if __name__ == '__main__':
-    files = os.listdir(MyImage.DIRECTORY)
+    input_target_folder()
+    # print(PATH_TO_FOLDER)
+    files = os.listdir(PATH_TO_FOLDER)
+    # print(files)
     for filename in files:
         img = MyImage(filename)
         if img.dt:
