@@ -26,12 +26,18 @@ class MyImage:
     
     def __init__(self, filename):
         self._filename: str = filename
-        self._path_to_file = str(PATH_TO_FOLDER/filename)
-        self._exif_dict: dict = piexif.load(self._path_to_file)
+        
+    def _path_to_file(self):
+        return str(PATH_TO_FOLDER/self._filename)
+    
+    def _exif_dict(self):
+        path_to_file = self._path_to_file()
+        return  piexif.load(path_to_file)
     
     @property
     def dt(self):
-        return self._exif_dict['0th'].get(piexif.ImageIFD.DateTime)
+        exif_dict = self._exif_dict()
+        return exif_dict['0th'].get(piexif.ImageIFD.DateTime)
         
     def _parse_image_datetime_from_filename(self):
         # Strip filename prefix and file extension
