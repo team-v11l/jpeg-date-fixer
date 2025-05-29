@@ -1,25 +1,33 @@
 from datetime import datetime
 from dateutil import parser
+import magic
 import os
 from pathlib import Path
 import piexif
 from PIL import Image
 from pydantic import BaseModel, Field, computed_field
 
-PATH_TO_FOLDER: str = ''
+PATH_TO_FOLDER: str = Path('./assets')
 
-def input_target_folder():
-    global PATH_TO_FOLDER
-    cwd = os.getcwd()
-    # target_folder = input("Enter the name of the target folder: ")
-    target_folder = 'images'
-    target_folder = target_folder.strip('./ ')
-    PATH_TO_FOLDER = Path(cwd)/target_folder
+# def input_target_folder():
+#     global PATH_TO_FOLDER
+#     cwd = os.getcwd()
+#     # target_folder = input("Enter the name of the target folder: ")
+#     target_folder = 'images'
+#     target_folder = target_folder.strip('./ ')
+#     PATH_TO_FOLDER = Path(cwd)/target_folder
 
-    if os.path.exists(PATH_TO_FOLDER):
-        print(f"\nPath to target folder: {PATH_TO_FOLDER}\n")
-    else:
-        print(f"\nFolder `{target_folder}` does not exist.\n")
+#     if os.path.exists(PATH_TO_FOLDER):
+#         print(f"\nPath to target folder: {PATH_TO_FOLDER}\n")
+#     else:
+#         print(f"\nFolder `{target_folder}` does not exist.\n")
+        
+        
+def validate_jpeg(filename: str) -> bool:
+    file_mime = magic.from_file(filename, mime=True)
+    if file_mime == 'image/jpeg':
+        return True
+    else: False
     
 
 class MyImage:
@@ -28,9 +36,6 @@ class MyImage:
     
     def __init__(self, filename: str):
         self._filename: str = filename
-        
-    # def __str__(self):
-    #     return f"File {self._filename} has datetime '{self.dt}'"
         
     def _path_to_file(self) -> str:
         return str(PATH_TO_FOLDER/self._filename)
@@ -67,29 +72,27 @@ class MyImage:
     def show_image(self) -> None:
         with Image.open(self._path_to_file) as img:
             img.show()
+    
+    def __str__(self):
+        return f"{self._filename}"
 
 if __name__ == '__main__':
-    input_target_folder()
-    files = os.listdir(PATH_TO_FOLDER)
-    for filename in files:
-        img = MyImage(filename)
-        if img.dt:
-            print(f"{filename} already has a datetime: {img.dt}")
-        else:
-            print(f"{filename} datetime is: {img.dt}")
-            print("Insert datetime based on filename")
-            img.set_datetime()
-            print(f"{filename} datetime is now set to: {img.dt}")
-            print("----------------------------------------------")
-    
-    
-    
-
+    for file in os.listdir(PATH_TO_FOLDER):
+        if validate_jpeg(PATH_TO_FOLDER/file):
+            img = MyImage(file)
+            if img.dt:
+                print(f"{file} already has a datetime: {img.dt}")
+            else:
+                print(f"{file} datetime is: {img.dt}")
+                print("Insert datetime based on filename")
+                img.set_datetime()
+                print(f"{file} datetime is now set to: {img.dt}")
+                print("----------------------------------------------")
+            
+            
 ### TODO
-# add print method str or dt
-# pydantic: image validation
-# handle error if not image
-# implement setter to modify datetime into file
-# Pylint
-# print image file name
-# move non-jpg to new folder
+# handle .gif and .mp4
+# Pylint?
+# add type hints
+# mypy check
+# move non-jpg to new folder?
