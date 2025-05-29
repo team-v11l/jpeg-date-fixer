@@ -5,30 +5,14 @@ import os
 from pathlib import Path
 import piexif
 from PIL import Image
-from pydantic import BaseModel, Field, computed_field
 
 PATH_TO_FOLDER: str = Path('./assets')
-
-# def input_target_folder():
-#     global PATH_TO_FOLDER
-#     cwd = os.getcwd()
-#     # target_folder = input("Enter the name of the target folder: ")
-#     target_folder = 'images'
-#     target_folder = target_folder.strip('./ ')
-#     PATH_TO_FOLDER = Path(cwd)/target_folder
-
-#     if os.path.exists(PATH_TO_FOLDER):
-#         print(f"\nPath to target folder: {PATH_TO_FOLDER}\n")
-#     else:
-#         print(f"\nFolder `{target_folder}` does not exist.\n")
-        
         
 def validate_jpeg(filename: str) -> bool:
     file_mime = magic.from_file(filename, mime=True)
     if file_mime == 'image/jpeg':
         return True
     else: False
-    
 
 class MyImage:
     
@@ -88,11 +72,3 @@ if __name__ == '__main__':
                 img.set_datetime()
                 print(f"{file} datetime is now set to: {img.dt}")
                 print("----------------------------------------------")
-            
-            
-### TODO
-# handle .gif and .mp4
-# Pylint?
-# add type hints
-# mypy check
-# move non-jpg to new folder?
