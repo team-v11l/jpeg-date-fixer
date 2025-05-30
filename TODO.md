@@ -1,7 +1,7 @@
 # TODO
 - add type hints
 - code analysis: mypy, pylint
-- filename parsing using regex
+- filename parsing using regex, match case workflow?
 - refact code for prod
 - containerise the app
 ## Add features
