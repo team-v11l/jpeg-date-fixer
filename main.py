@@ -9,10 +9,13 @@ from PIL import Image
 PATH_TO_FOLDER: str = Path('./assets')
         
 def validate_jpeg(filename: str) -> bool:
-    file_mime = magic.from_file(filename, mime=True)
-    if file_mime == 'image/jpeg':
+    mime_type = magic.from_file(filename, mime=True)
+    if mime_type == 'image/jpeg':
+        print(f"File: {filename}. MIME type:{mime_type}")
         return True
-    else: False
+    else:
+        print(f"File: {filename}. MIME type:{mime_type}")
+        return False
 
 class MyImage:
     
