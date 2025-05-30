@@ -72,3 +72,4 @@ if __name__ == '__main__':
                 img.set_datetime()
                 print(f"{file} datetime is now set to: {img.dt}")
                 print("----------------------------------------------")
+                
