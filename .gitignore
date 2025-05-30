@@ -3,6 +3,7 @@ __pycache__/
 .mypy_cache/
 .vscode/
 assets/
+notebooks/
 
 # Notebooks
 *.ipynb
