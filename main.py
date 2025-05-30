@@ -16,6 +16,16 @@ def validate_jpeg(filename: str) -> bool:
     else:
         print(f"File: {filename}. MIME type:{mime_type}")
         return False
+    
+def fix_datetimes(path: Path) -> None:
+    for file in os.listdir(path):
+        if validate_jpeg(path/file):
+            img = MyImage(file)
+            if img.dt:
+                continue
+            else:
+                img.set_datetime()
+                print(f"{file} datetime set to: {img.dt}")
 
 class MyImage:
     
@@ -38,41 +48,35 @@ class MyImage:
     
     def _parse_image_datetime_from_filename(self) -> str:
         # Strip filename prefix and file extension
-        filename_stripped: str = self._filename.lstrip('IMGPANO_-').rstrip('.jpg')
+        filename_stripped: str = self._filename.lstrip('ScreenshotIMGPANO_-').rstrip('.jpg')
         # Format filename for parsing based on filename formatting
         if 'WA' in filename_stripped:
             filename_formatted: str = filename_stripped.split('-')[0]
         else:
             filename_formatted: str = filename_stripped.replace('_', ' ')
+            print(filename_formatted)
         # Parse formatted filename as datetime
         filename_parsed: datetime = parser.parse(filename_formatted)
+        print(filename_parsed)
         # Convert datetime into formatted string
         file_datetime: str = filename_parsed.strftime(self.DATETIME_FORMAT)
         return file_datetime
     
     def set_datetime(self) -> None:
+        exif_dict = self._exif_dict()
         file_datetime: str = self._parse_image_datetime_from_filename()
-        self._exif_dict['0th'][piexif.ImageIFD.DateTime] = file_datetime
-        exif_bytes: bytes = piexif.dump(self._exif_dict)  # Convert properties into bytes
-        piexif.insert(exif_bytes, self._path_to_file)
+        exif_dict['0th'][piexif.ImageIFD.DateTime] = file_datetime
+        exif_bytes: bytes = piexif.dump(exif_dict)  # Convert properties into bytes
+        path_to_file = self._path_to_file()
+        piexif.insert(exif_bytes, path_to_file)
 
     def show_image(self) -> None:
-        with Image.open(self._path_to_file) as img:
+        path_to_file = self._path_to_file()
+        with Image.open(path_to_file) as img:
             img.show()
     
     def __str__(self):
         return f"{self._filename}"
 
 if __name__ == '__main__':
-    for file in os.listdir(PATH_TO_FOLDER):
-        if validate_jpeg(PATH_TO_FOLDER/file):
-            img = MyImage(file)
-            if img.dt:
-                print(f"{file} already has a datetime: {img.dt}")
-            else:
-                print(f"{file} datetime is: {img.dt}")
-                print("Insert datetime based on filename")
-                img.set_datetime()
-                print(f"{file} datetime is now set to: {img.dt}")
-                print("----------------------------------------------")
-                
+    fix_datetimes(PATH_TO_FOLDER)
