@@ -6,4 +6,4 @@
 - containerise the app
 ## Add features
 - add logging functionality: https://www.geeksforgeeks.org/logging-in-python/
-- handle .gif and .mp4 files. Create parent class File, children classes: Image, Video, GIF?
+- handle other file types e.g. gif, mp4, png... Create parent class File, children classes: Image, Video, GIF?
