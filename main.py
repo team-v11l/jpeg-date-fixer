@@ -8,7 +8,7 @@ from PIL import Image
 
 PATH_TO_FOLDER: str = Path('./assets')
         
-def validate_jpeg(path_to_file: str) -> bool:
+def validate_jpeg(path_to_file: Path) -> bool:
     mime_type = magic.from_file(path_to_file, mime=True)
     filename = os.path.split(path_to_file)[-1]
     if mime_type == 'image/jpeg':
