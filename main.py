@@ -8,20 +8,22 @@ from PIL import Image
 
 PATH_TO_FOLDER: str = Path('./assets')
         
-def validate_jpeg(filename: str) -> bool:
-    mime_type = magic.from_file(filename, mime=True)
+def validate_jpeg(path_to_file: str) -> bool:
+    mime_type = magic.from_file(path_to_file, mime=True)
+    filename = os.path.split(path_to_file)[-1]
     if mime_type == 'image/jpeg':
-        print(f"File: {filename}. MIME type:{mime_type}")
+        print(f"File: {filename}. MIME type: {mime_type}")
         return True
     else:
         print(f"File: {filename}. MIME type:{mime_type}")
         return False
     
-def fix_datetimes(path: Path) -> None:
-    for file in os.listdir(path):
-        if validate_jpeg(path/file):
+def fix_datetimes(path_to_folder: Path) -> None:
+    for file in os.listdir(path_to_folder):
+        if validate_jpeg(path_to_folder/file):
             img = MyImage(file)
             if img.dt:
+                print(f"File: {file}. DateTime: {img.dt}")
                 continue
             else:
                 img.set_datetime()
@@ -54,10 +56,8 @@ class MyImage:
             filename_formatted: str = filename_stripped.split('-')[0]
         else:
             filename_formatted: str = filename_stripped.replace('_', ' ')
-            print(filename_formatted)
         # Parse formatted filename as datetime
         filename_parsed: datetime = parser.parse(filename_formatted)
-        print(filename_parsed)
         # Convert datetime into formatted string
         file_datetime: str = filename_parsed.strftime(self.DATETIME_FORMAT)
         return file_datetime
